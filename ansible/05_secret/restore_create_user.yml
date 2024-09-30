@@ -1,0 +1,12 @@
+---
+- name: 사용자 제거
+  hosts: webservers
+  become: true
+  vars_files:
+    - secret.yml
+  tasks:
+    - name: 사용자 제거 동작
+      ansible.builtin.user:
+        name: user1
+        state: absent
+        remove: yes

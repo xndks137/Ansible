@@ -1,0 +1,4 @@
+- name: Task - 패키지 설치
+  dnf:
+    name: "{{ packages.web_pkg }}"
+    state: latest

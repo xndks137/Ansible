@@ -1,0 +1,28 @@
+---
+- name: 0) 복구
+  hosts: webservers
+  gather_facts: false
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: 웹 서버 HTTPS 설정
+      ansible.builtin.file:
+        path: /var/www/html/index.html
+        state: absent
+
+    - name: 방화벽 포트 닫기
+      ansible.posix.firewalld:
+        service: "{{ item }}"
+        permanent: true
+        immediate: true
+        state: disabled
+      loop:
+        - http
+        - https
+
+    - name: 패키지 제거
+      ansible.builtin.dnf:
+        name:
+          - httpd
+          - mod_ssl
+        state: absent

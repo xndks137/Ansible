@@ -1,0 +1,22 @@
+---
+- name: 파일 복사
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: -ble.sh 복사
+      ansible.builtin.copy:
+        src: files/blesh
+        dest: /home/devops/.local/share/
+        owner: devops
+        group: devops
+        mode: '0755'
+
+    - name: ~/.bashrc 설정
+      ansible.builtin.blockinfile:
+        path: /home/devops/.bashrc
+        block: |
+          #
+          # ble.sh
+          #
+          source ~/.local/share/blesh/ble.sh
+        state: present

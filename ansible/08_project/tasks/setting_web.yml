@@ -1,0 +1,11 @@
+---
+- name: 2-1) index.html 파일 생성
+  ansible.builtin.copy:
+    content: "{{ ansible_fqdn }} : {{ ansible_all_ipv4_addresses }}\n"
+    dest: "{{ dest }}"
+    mode: '0644'
+
+- name: 2-2) 웹 서비스 재기동
+  ansible.builtin.service:
+    name: httpd
+    state: restarted

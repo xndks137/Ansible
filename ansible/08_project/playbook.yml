@@ -1,0 +1,42 @@
+---
+- name: 0) 웹 서버 설정
+  hosts: webservers
+  tasks:
+    ###################
+    # 1. 웹 서버 설치 및 서비스 기동
+    # 2. 웹 서버 설정
+    # 3. 방화벽 설정
+    # 4. 웹 서비스 확인
+    ###################
+    - name: 1) 패키지 설치 및 서비스 기동
+      ansible.builtin.include_tasks:
+        file: tasks/install_pkg.yml
+      when: ansible_distribution == 'CentOS'
+      vars:
+        web_pkg:
+          - httpd
+          - mod_ssl
+          - firewalld
+        web_svc:
+          - httpd
+          - firewalld
+
+    - name: 2) 웹 서버 설정
+      ansible.builtin.include_tasks:
+        file: tasks/setting_web.yml
+      vars:
+        dest: /var/www/html/index.html
+
+    - name: 3) 방화벽 설정
+      ansible.builtin.include_tasks:
+        file: tasks/setting_fw.yml
+      vars:
+        fw:
+          - http
+          - https
+
+- name: 4) 서버 확인
+  ansible.builtin.import_playbook: plays/test.yml
+  vars:
+    myhost: localhost
+    url: "http://ansible1.example.com"

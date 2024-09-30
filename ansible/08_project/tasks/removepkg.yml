@@ -1,0 +1,4 @@
+- name: 패키지 제거
+  ansible.builtin.dnf:
+    name: "{{ pkg }}"
+    state: absent

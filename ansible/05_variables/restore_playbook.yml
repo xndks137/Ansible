@@ -1,0 +1,31 @@
+---
+- name: 웹 서버 복구
+  hosts: webserver
+  vars_files:
+    - vars/variable.yml
+  tasks:
+    - name: 방화벽 제외
+      ansible.posix.firewalld:
+        service: "{{ item }}"
+        permanent: true
+        immediate: true
+        state: disabled
+      loop:
+        "{{ fw_webs }}"
+
+    - name: 설정 파일 제거
+      ansible.builtin.file:
+        path: /var/www/html/index.html
+        state: absent
+
+    - name: 서비스 비활성화
+      ansible.builtin.service:
+        name: httpd
+        state: stopped
+        enabled: false
+
+    - name: 패키지 제거
+      ansible.builtin.dnf:
+        name:
+          - "{{ pkg_web }}"
+        state: absent

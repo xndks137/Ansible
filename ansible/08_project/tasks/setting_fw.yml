@@ -1,0 +1,8 @@
+---
+- name: 3-1) 방화벽 설정
+  ansible.posix.firewalld:
+    service: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: enabled
+  loop: "{{ fw }}"

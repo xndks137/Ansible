@@ -1,0 +1,40 @@
+---
+# tasks file for myvhost
+# 1) 패키지 설치 - httpd
+# 2) 서비스 기동
+# 3) 설정 파일 - /etc/httpd/conf.d/vhost.conf -> notify ~ handler
+# 4) 방화벽 등록
+# 5) handler 작업 - 서비스 재시작
+- name: 1) 패키지 설치 - httpd
+  ansible.builtin.dnf:
+    name:
+      - httpd
+    state: present
+
+- name: 2) 서비스 기동
+  ansible.builtin.service:
+    name: httpd
+    state: started
+    enabled: true
+
+- name: 3) 디렉토리 추가
+  ansible.builtin.file:
+    path: "/var/www/vhosts/{{ ansible_hostname }}"
+    state: directory
+    mode: '0755'
+
+- name: 4) 설정 파일
+  ansible.builtin.template:
+    src: vhost.conf.j2
+    dest: /etc/httpd/conf.d/vhosts.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart_httpd
+
+- name: 5) 방화벽 등록
+  ansible.posix.firewalld:
+    service: http
+    permanent: true
+    immediate: true
+    state: enabled

@@ -1,0 +1,34 @@
+---
+- name: 설정 복구
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: 방화벽 작업
+      ansible.builtin.include_tasks:
+        file: tasks/fw_rule.yml
+      vars:
+        fw_svc:
+          - http
+          - https
+
+    - name: 서비스 작업
+      ansible.builtin.include_tasks:
+        file: tasks/stopsvc.yml
+      vars:
+        svc:
+          - httpd
+
+    - name: 파일 작업
+      ansible.builtin.include_tasks:
+        file: tasks/removefile.yml
+      vars:
+        where_file:
+          - /var/www/html/index.html
+
+    - name: 패키지 작업
+      ansible.builtin.include_tasks:
+        file: tasks/removepkg.yml
+      vars:
+        pkg:
+          - httpd
+          - mod_ssl

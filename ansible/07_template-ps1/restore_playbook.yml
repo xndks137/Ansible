@@ -1,0 +1,9 @@
+---
+- name: 환경 파일 배포
+  gather_facts: false
+  hosts: all
+  tasks:
+    - name: Ble.sh 제거
+      ansible.builtin.file:
+        path: /home/devops/.local/share/blesh
+        state: absent

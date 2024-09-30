@@ -1,0 +1,12 @@
+---
+- name: 1-1) 패키지 설치
+  ansible.builtin.dnf:
+    name: "{{ web_pkg }}"
+    state: present
+
+- name: 1-2) 서비스 기동
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  loop: "{{ web_svc }}"

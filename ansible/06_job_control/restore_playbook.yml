@@ -1,0 +1,13 @@
+---
+- name: Restore playbook
+  hosts: databases
+  vars:
+    packages:
+      - httpd
+      - mariadb-server
+  tasks:
+    - name: Remove packages
+      ansible.builtin.yum:
+        name: "{{ item }}"
+        state: absent
+      loop: "{{ packages }}"

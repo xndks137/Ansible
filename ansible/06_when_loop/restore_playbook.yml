@@ -1,0 +1,13 @@
+---
+- name: 0) DB 서버 제거
+  hosts: all
+  vars:
+    pkg:
+      - mariadb-server
+      - python3-PyMySQL
+  tasks:
+    - name: DB 패키지 제거 - mariadb-server, python3-PyMySQL
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+        state: absent
+      loop: "{{ pkg }}"

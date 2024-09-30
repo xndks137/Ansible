@@ -1,0 +1,11 @@
+---
+- name: 텍스트 블록 추가하기
+  hosts: all
+  tasks:
+    - name: 존재하는 파일에 텍스트 블록 추가
+      ansible.builtin.blockinfile:
+        path: /home/devops/users.txt
+        block: |
+          2nd line
+          blockinfile 모듈을 통해 추가함
+        state: present

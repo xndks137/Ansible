@@ -1,0 +1,11 @@
+---
+- name: 관리 대상 호스트 설정 파일 공유
+  hosts: all
+  tasks:
+    - name: /etc/hosts 파일 공유
+      ansible.builtin.copy:
+        src: files/hosts
+        dest: /etc/hosts
+        owner: root
+        group: root
+        mode: '0644'

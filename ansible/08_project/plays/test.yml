@@ -1,0 +1,15 @@
+---
+- name: 웹 서버 확인
+  hosts: "{{ myhost }}"
+  become: false
+  gather_facts: false
+  tasks:
+    - name: 웹 서버 연결
+      ansible.builtin.uri:
+        url: "{{ url }}"
+        status_code: 200
+      register: result
+
+    - name: 출력 페이지 확인
+      debug:
+        var: result.msg
